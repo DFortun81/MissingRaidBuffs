@@ -62,9 +62,9 @@
 				self.Name:SetPoint("TOPLEFT", 3, 0)
 			</OnMouseUp>
 		</Scripts>
-		<HighlightTexture setAllPoints="true" file="Interface\Buttons\ListButtons">
-			<TexCoords left="0" right="0.8203125" top="0.1875" bottom="0.375"/>
-		</HighlightTexture>
+		<HighlightTexture setAllPoints="true" file="Interface\Buttons\ButtonHilight-Square" alphaMode="ADD">
+            <Color r="0.1" g="1" b="0.1" a="1"/>
+        </HighlightTexture>
 	</Button>
 
 	<Button name="MissingRaidBuffsListViewQuickSelectButtonTemplate" mixin="MissingRaidBuffsListViewQuickSelectButtonMixIn" virtual="true" hidden="true">
