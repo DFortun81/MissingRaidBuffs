@@ -306,9 +306,9 @@ function MissingRaidBuffsListViewQuickSelectMixIn:Update()
         button.Highlight:SetShown(buff.Enabled)
 
         if ( previous == nil ) then
-            button:SetPoint("RIGHT", self, "RIGHT", -5, 0)
+            button:SetPoint("RIGHT", self, "RIGHT", -4, 0)
         else
-            button:SetPoint("RIGHT", previous, "LEFT", -5, 0)
+            button:SetPoint("RIGHT", previous, "LEFT", -4, 0)
         end
         button:Show()
 

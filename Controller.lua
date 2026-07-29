@@ -128,6 +128,9 @@ MRB.RegisterCallback(MODULE_NAME, "initialize", function()
 
     -- Reload all buffs when we first enter the world
     MRB.RegisterEvent(MODULE_NAME, "PLAYER_ENTERING_WORLD", refreshAllPartyRaidBuffs)
+	
+	-- Reload all buffs when someone's role changes in the group
+    MRB.RegisterEvent(MODULE_NAME, "PLAYER_ROLES_ASSIGNED", refreshAllPartyRaidBuffs)
 
     -- Reload all buffs when group updates
     MRB.RegisterEvent(MODULE_NAME, "GROUP_ROSTER_UPDATE", refreshAllPartyRaidBuffs)

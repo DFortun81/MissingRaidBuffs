@@ -2,8 +2,8 @@ local MRB, C, L = unpack(select(2, ...))
 local MODULE_NAME = "config"
 
 -- Globals cache
-local ipairs, pairs, next, type, select, strsplit, tinsert, tremove, C_CreatureInfo, GetSpellInfo, UnitClass
-	= ipairs, pairs, next, type, select, strsplit, tinsert, tremove, C_CreatureInfo, GetSpellInfo, UnitClass;
+local ipairs, pairs, next, type, select, strsplit, tinsert, tremove, C_CreatureInfo, GetSpellInfo, UnitClass, UnitGroupRolesAssigned
+	= ipairs, pairs, next, type, select, strsplit, tinsert, tremove, C_CreatureInfo, GetSpellInfo, UnitClass, UnitGroupRolesAssigned;
 
 ---------------------------------------------
 -- CONSTANTS
@@ -13,6 +13,7 @@ local IS_HORDE = UnitFactionGroup("player")=="Horde"
 local IS_PRIEST = PLAYER_CLASS == "PRIEST"
 local IS_MAGE = PLAYER_CLASS == "MAGE"
 local IS_DRUID = PLAYER_CLASS == "DRUID"
+local IS_PALADIN = PLAYER_CLASS == "PALADIN"
 
 -- Classic Raid Buffs
 local POWER_WORD_FORTITUDE_SPELLID = 1243
@@ -25,6 +26,16 @@ local ARCANE_INTELLECT_SPELLID = 1459
 local ARCANE_BRILLIANCE_SPELLID = 23028
 local MARK_OF_THE_WILD_SPELLID = 1126
 local GIFT_OF_THE_WILD_SPELLID = 21849
+local BLESSING_OF_KINGS_SPELLID = 20217	-- Blessing of Kings
+local GREATER_BLESSING_OF_KINGS_SPELLID = 25898	-- Greater Blessing of Kings
+local BLESSING_OF_MIGHT_SPELLID = 25291	-- Blessing of Might (Rank 7)
+local GREATER_BLESSING_OF_MIGHT_SPELLID = 25916	-- Greater Blessing of Might (Rank 2)
+local BLESSING_OF_WISDOM_SPELLID = 25290	-- Blessing of Wisdom (Rank 6)
+local GREATER_BLESSING_OF_WISDOM_SPELLID = 25918	-- Greater Blessing of Wisdom (Rank 2)
+local BLESSING_OF_SALVATION_SPELLID = 1038	-- Blessing of Salvation
+local GREATER_BLESSING_OF_SALVATION_SPELLID = 25895	-- Greater Blessing of Salvation
+local BLESSING_OF_SANCTUARY_SPELLID = 20914	-- Blessing of Sanctuary (Rank 4)
+local GREATER_BLESSING_OF_SANCTUARY_SPELLID = 25899	-- Greater Blessing of Sanctuary (Rank 1)
 
 -- Switch the desired spellIDs based on the game flavor
 local version = select(7, GetBuildInfo());
@@ -40,6 +51,12 @@ if version >= 20000 then
 	ARCANE_BRILLIANCE_SPELLID = 27127	-- Arcane Brilliance (Rank 2)
 	MARK_OF_THE_WILD_SPELLID = 26990	-- Mark of the Wild (Rank 8)
 	GIFT_OF_THE_WILD_SPELLID = 26991	-- Gift of the Wild (Rank 3)
+	BLESSING_OF_MIGHT_SPELLID = 27140	-- Blessing of Might (Rank 8)
+	GREATER_BLESSING_OF_MIGHT_SPELLID = 27141	-- Greater Blessing of Might (Rank 3)
+	BLESSING_OF_WISDOM_SPELLID = 27142	-- Blessing of Wisdom (Rank 7)
+	GREATER_BLESSING_OF_WISDOM_SPELLID = 27143	-- Greater Blessing of Wisdom (Rank 3)
+	BLESSING_OF_SANCTUARY_SPELLID = 27168	-- Blessing of Sanctuary (Rank 5)
+	GREATER_BLESSING_OF_SANCTUARY_SPELLID = 27169	-- Greater Blessing of Sanctuary (Rank 2)
 end
 
 ---------------------------------------------
@@ -191,8 +208,11 @@ function C:BuffIsEnabled(buffIndex)
 end
 
 function C:BuffIsRequiredForClass(playerName, buff)
-    local unitclass = select(2, UnitClass(playerName))
-    return db.profile.Auras[buff].Enabled and db.profile.Auras[buff].Filters[unitclass]
+	local aura = db.profile.Auras[buff];
+	if aura.Enabled then
+		return aura.Filters[select(2, UnitClass(playerName))] and aura.Roles[UnitGroupRolesAssigned(playerName)]
+	end
+	return false;
 end
 
 function C:ToggleBuff(buffIndex)
@@ -250,6 +270,12 @@ C.DEFAULT_DB = {
                     ["WARLOCK"] = true,
                     ["WARRIOR"] = true,
                 },
+				Roles = {
+					["TANK"] = true,
+					["HEALER"] = true,
+					["DAMAGER"] = true,
+					["NONE"] = true,
+				},
             },
             { -- "Divine Spirit"
                 ["Enabled"] = IS_PRIEST, -- and has divine spirit talent
@@ -268,6 +294,12 @@ C.DEFAULT_DB = {
                     ["WARLOCK"] = true,
                     ["WARRIOR"] = false,
                 },
+				Roles = {
+					["TANK"] = true,
+					["HEALER"] = true,
+					["DAMAGER"] = true,
+					["NONE"] = true,
+				},
             },
             { -- "Shadow Protection"
                 ["Enabled"] = false,
@@ -286,6 +318,12 @@ C.DEFAULT_DB = {
                     ["WARLOCK"] = true,
                     ["WARRIOR"] = true,
                 },
+				Roles = {
+					["TANK"] = true,
+					["HEALER"] = true,
+					["DAMAGER"] = true,
+					["NONE"] = true,
+				},
             },
             { -- "Arcane Intellect"
                 ["Enabled"] = IS_MAGE,
@@ -304,6 +342,12 @@ C.DEFAULT_DB = {
                     ["WARLOCK"] = true,
                     ["WARRIOR"] = false,
                 },
+				Roles = {
+					["TANK"] = true,
+					["HEALER"] = true,
+					["DAMAGER"] = true,
+					["NONE"] = true,
+				},
             },
             { -- "Mark of the Wild"
                 ["Enabled"] = IS_DRUID,
@@ -322,6 +366,132 @@ C.DEFAULT_DB = {
                     ["WARLOCK"] = true,
                     ["WARRIOR"] = true,
                 },
+				Roles = {
+					["TANK"] = true,
+					["HEALER"] = true,
+					["DAMAGER"] = true,
+					["NONE"] = true,
+				},
+            },
+			{ -- "Blessing of Kings"
+                ["Enabled"] = IS_PALADIN,
+                Spells = {
+                    BLESSING_OF_KINGS_SPELLID,
+                    GREATER_BLESSING_OF_KINGS_SPELLID
+                },
+                Filters = {
+                    ["DRUID"] = true,
+                    ["HUNTER"] = true,
+                    ["MAGE"] = true,
+                    ["PALADIN"] = true,
+                    ["PRIEST"] = true,
+                    ["ROGUE"] = true,
+                    ["SHAMAN"] = true,
+                    ["WARLOCK"] = true,
+                    ["WARRIOR"] = true,
+                },
+				Roles = {
+					["TANK"] = true,
+					["HEALER"] = true,
+					["DAMAGER"] = true,
+					["NONE"] = true,
+				},
+            },
+			{ -- "Blessing of Might"
+                ["Enabled"] = IS_PALADIN,
+                Spells = {
+                    BLESSING_OF_MIGHT_SPELLID,
+                    GREATER_BLESSING_OF_MIGHT_SPELLID
+                },
+                Filters = {
+                    ["DRUID"] = true,
+                    ["HUNTER"] = true,
+                    ["MAGE"] = false,
+                    ["PALADIN"] = true,
+                    ["PRIEST"] = false,
+                    ["ROGUE"] = true,
+                    ["SHAMAN"] = true,
+                    ["WARLOCK"] = false,
+                    ["WARRIOR"] = true,
+                },
+				Roles = {
+					["TANK"] = true,
+					["HEALER"] = false,
+					["DAMAGER"] = true,
+					["NONE"] = true,
+				},
+            },
+			{ -- "Blessing of Wisdom"
+                ["Enabled"] = IS_PALADIN,
+                Spells = {
+                    BLESSING_OF_WISDOM_SPELLID,
+                    GREATER_BLESSING_OF_WISDOM_SPELLID
+                },
+                Filters = {
+                    ["DRUID"] = true,
+                    ["HUNTER"] = true,
+                    ["MAGE"] = true,
+                    ["PALADIN"] = true,
+                    ["PRIEST"] = true,
+                    ["ROGUE"] = false,
+                    ["SHAMAN"] = true,
+                    ["WARLOCK"] = true,
+                    ["WARRIOR"] = false,
+                },
+				Roles = {
+					["TANK"] = true,
+					["HEALER"] = true,
+					["DAMAGER"] = true,
+					["NONE"] = true,
+				},
+            },
+			{ -- "Blessing of Salvation"
+                ["Enabled"] = false,
+                Spells = {
+                    BLESSING_OF_SALVATION_SPELLID,
+                    GREATER_BLESSING_OF_SALVATION_SPELLID
+                },
+                Filters = {
+                    ["DRUID"] = true,
+                    ["HUNTER"] = true,
+                    ["MAGE"] = true,
+                    ["PALADIN"] = true,
+                    ["PRIEST"] = true,
+                    ["ROGUE"] = true,
+                    ["SHAMAN"] = true,
+                    ["WARLOCK"] = true,
+                    ["WARRIOR"] = true,
+                },
+				Roles = {
+					["TANK"] = false,
+					["HEALER"] = true,
+					["DAMAGER"] = true,
+					["NONE"] = true,
+				},
+            },
+			{ -- "Blessing of Sanctuary"
+                ["Enabled"] = false,
+                Spells = {
+                    BLESSING_OF_SANCTUARY_SPELLID,
+                    GREATER_BLESSING_OF_SANCTUARY_SPELLID
+                },
+                Filters = {
+                    ["DRUID"] = true,
+                    ["HUNTER"] = true,
+                    ["MAGE"] = true,
+                    ["PALADIN"] = true,
+                    ["PRIEST"] = true,
+                    ["ROGUE"] = true,
+                    ["SHAMAN"] = true,
+                    ["WARLOCK"] = true,
+                    ["WARRIOR"] = true,
+                },
+				Roles = {
+					["TANK"] = true,
+					["HEALER"] = true,
+					["DAMAGER"] = true,
+					["NONE"] = true,
+				},
             },
         },
     }
