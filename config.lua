@@ -14,11 +14,12 @@ local IS_PRIEST = PLAYER_CLASS == "PRIEST"
 local IS_MAGE = PLAYER_CLASS == "MAGE"
 local IS_DRUID = PLAYER_CLASS == "DRUID"
 
+-- Classic Raid Buffs
 local POWER_WORD_FORTITUDE_SPELLID = 1243
 local PRAYER_OF_FORTITUDE_SPELLID = 21562
 local DIVINE_SPIRIT_SPELLID = 14752
 local PRAYER_OF_SPIRIT_SPELLID = 27681
-local SHADOW_PROTECTION_SPELLD = 976
+local SHADOW_PROTECTION_SPELLID = 976
 local PRAYER_OF_SHADOW_PROTECTION_SPELLID = 27683
 local ARCANE_INTELLECT_SPELLID = 1459
 local ARCANE_BRILLIANCE_SPELLID = 23028
@@ -33,7 +34,7 @@ if version >= 20000 then
 	PRAYER_OF_FORTITUDE_SPELLID = 25392	-- Prayer of Fortitude (Rank 3)
 	DIVINE_SPIRIT_SPELLID = 25312	-- Divine Spirit (Rank 5)
 	PRAYER_OF_SPIRIT_SPELLID = 32999	-- Prayer of Spirit (Rank 2)
-	SHADOW_PROTECTION_SPELLD = 25433	-- Shadow Protection (Rank 4)
+	SHADOW_PROTECTION_SPELLID = 25433	-- Shadow Protection (Rank 4)
 	PRAYER_OF_SHADOW_PROTECTION_SPELLID = 39374	-- Prayer of Shadow Protection (Rank 2)
 	ARCANE_INTELLECT_SPELLID = 27126	-- Arcane Intellect (Rank 6)
 	ARCANE_BRILLIANCE_SPELLID = 27127	-- Arcane Brilliance (Rank 2)
@@ -271,7 +272,7 @@ C.DEFAULT_DB = {
             { -- "Shadow Protection"
                 ["Enabled"] = false,
                 Spells = {
-                    SHADOW_PROTECTION_SPELLD,
+                    SHADOW_PROTECTION_SPELLID,
                     PRAYER_OF_SHADOW_PROTECTION_SPELLID
                 },
                 Filters = {
@@ -325,31 +326,6 @@ C.DEFAULT_DB = {
         },
     }
 }
-
-local function setDefaults(DB, DEFAULTS)
-    -- find any nil values and set to default values
-    for k,v in pairs(DEFAULTS) do
-        if ( DB[k] == nil ) then
-            if ( type(v) == "table") then
-                DB[k] = {}
-            else
-                DB[k] = v
-            end
-        end
-
-        if ( type(DB[k]) == "table" ) then
-            setDefaults(DB[k], v)
-        end
-    end
-
-    -- clean up unknown values
-    for k,v in pairs(DB) do
-        if ( DEFAULTS[k] == nil ) then
-            DB[k] = nil
-        end
-    end
-end
-
 function C:upgradeDB()
     if ( db.profile.DBVersion == nil ) then
         db.profile.DBVersion = CURRENT_DB_VERSION
