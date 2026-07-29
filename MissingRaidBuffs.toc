@@ -18,7 +18,6 @@ lib\AceConfigDialog-3.0\AceConfigDialog-3.0.xml
 
 addon.lua
 locales/[TextLocale].lua
-media.lua
 config.lua
 
 Model.lua

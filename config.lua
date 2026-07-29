@@ -9,13 +9,10 @@ local ipairs, pairs, next, type, select, strsplit, tinsert, tremove, C_CreatureI
 -- CONSTANTS
 ---------------------------------------------
 local PLAYER_CLASS = select(2,UnitClass("player"));
-local IS_CLASSIC = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC)
 local IS_HORDE = UnitFactionGroup("player")=="Horde"
 local IS_PRIEST = PLAYER_CLASS == "PRIEST"
 local IS_MAGE = PLAYER_CLASS == "MAGE"
 local IS_DRUID = PLAYER_CLASS == "DRUID"
-
-local SHAMAN_PALADIN_TEXTURE_ICON = IS_HORDE and MRB.Media.TextureIcons.CLASS_TEXTURE_ICONS.SHAMAN or MRB.Media.TextureIcons.CLASS_TEXTURE_ICONS.PALADIN
 
 local POWER_WORD_FORTITUDE_SPELLID = 1243
 local PRAYER_OF_FORTITUDE_SPELLID = 21562
@@ -128,10 +125,6 @@ local function clone(instance)
         k,v = next(instance, k)
     end
     return obj;
-end
-
-local function formatClass(class, str)
-    return MRB.Media.TextureIcons.CLASS_TEXTURE_ICONS[class] .. " " .. GetClassColorObj(class):WrapTextInColorCode(str)
 end
 
 local function recreateBuffsDatatype()
