@@ -1,0 +1,28 @@
+## Title: Missing Raid Buffs (Era)
+## IconTexture: Interface/Addons/MissingRaidBuffs/logo.png
+## Notes: List missing raid buffs for all party & raid members
+## Category-enUS: Buffs & Debuffs
+## Version: @project-version@
+## Author: Crieve, Slainsvirtue-Mankrik
+## Interface: 11508, 11509, 20506
+## X-Curse-Project-ID: 1630010
+## X-Wago-ID: vNAglpKo
+## SavedVariables: MissingRaidBuffsDB
+
+lib\LibStub\LibStub.lua
+lib\CallbackHandler-1.0\CallbackHandler-1.0.xml
+lib\AceLocale-3.0\AceLocale-3.0.xml
+lib\AceGUI-3.0\AceGUI-3.0.xml
+lib\AceDB-3.0\AceDB-3.0.xml
+lib\AceConfigRegistry-3.0\AceConfigRegistry-3.0.xml
+lib\AceConfigDialog-3.0\AceConfigDialog-3.0.xml
+
+locales.xml
+addon.lua
+media.lua
+config.lua
+
+Model.lua
+Controller.lua
+View.lua
+View.xml

@@ -1,0 +1,31 @@
+package-as: missing-raid-buffs-era
+enable-nolib-creation: no
+
+externals:
+
+ignore: # Files and directories beginning with a dot (such as .git) are automatically ignored, as is the pgkmeta file itself.
+  - _config.yml
+  - setup.cfg
+  - README.md
+  - *.bat
+  - *.sh
+  - *.md
+  - *.cfg
+  - *.yml
+
+required-dependencies:
+
+optional-dependencies:
+
+embedded-libraries:
+
+license-output: LICENSE.txt
+
+tools-used:
+
+#manual-changelog:
+# filename: CHANGELOG.md
+# markup-type: markdown
+
+move-folders:
+
