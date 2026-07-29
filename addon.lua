@@ -3,8 +3,8 @@ local MODULE_NAME = "addon"
 
 ADDON[1] = {} -- MRB, Addon
 ADDON[2] = {} -- C, Config
-ADDON[3] = LibStub("AceLocale-3.0"):GetLocale(ADDON_NAME, true) -- L, Locale
-local MRB, C, L = unpack(ADDON)
+ADDON[3] = {} -- L, Locale
+local MRB, C = unpack(ADDON)
 
 --[==[@debug@
 _G["MRB"] = MRB --Expose internals on the Plugin lib

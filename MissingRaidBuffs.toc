@@ -11,14 +11,13 @@
 
 lib\LibStub\LibStub.lua
 lib\CallbackHandler-1.0\CallbackHandler-1.0.xml
-lib\AceLocale-3.0\AceLocale-3.0.xml
 lib\AceGUI-3.0\AceGUI-3.0.xml
 lib\AceDB-3.0\AceDB-3.0.xml
 lib\AceConfigRegistry-3.0\AceConfigRegistry-3.0.xml
 lib\AceConfigDialog-3.0\AceConfigDialog-3.0.xml
 
-locales.xml
 addon.lua
+locales/[TextLocale].lua
 media.lua
 config.lua
 

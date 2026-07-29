@@ -1,10 +1,5 @@
-local ADDON_NAME = ...
-
-local L = LibStub("AceLocale-3.0"):NewLocale(ADDON_NAME, "zhCN")
-
-if not L then
-    return
-end
+local ADDON_NAME, ADDON = ...
+local L = ADDON[3];
 
 L["Buff is required for damager role"] = "DPS需要的buff"
 L["Buff is required for Druids"] = "德鲁伊需要的buff"
@@ -18,20 +13,14 @@ L["Buff is required for Shamans"] = "萨满需要的buff"
 L["Buff is required for tank roles"] = "坦克需要的buff"
 L["Buff is required for Warlocks"] = "术士需要的buff"
 L["Buff is required for Warriors"] = "战士需要的buff"
---[[Translation missing --]]
 L["Buffs"] = "Buffs"
 L["Configure"] = "设定"
 L["Current profile:"] = "当前配置文件:"
---[[Translation missing --]]
 L["Debug"] = "Debug"
 L["Determine how your assigned groups are displayed"] = "确定分配给您需要加buff的队伍的显示方式"
---[[Translation missing --]]
 L["Disable dragging and resizing of the window"] = "Disable dragging and resizing of the window"
---[[Translation missing --]]
 L["Do not apply group assignments to groups smaller than the selected size"] = "Do not apply group assignments to groups smaller than the selected size"
---[[Translation missing --]]
 L["Enable debugging"] = "Enable debugging"
---[[Translation missing --]]
 L["Group Assignments"] = "Group Assignments"
 L["Group size"] = "团队人数"
 L["Hide frame when in combat"] = "进入战斗自动隐藏窗口"
