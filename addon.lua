@@ -1,9 +1,18 @@
 local ADDON_NAME, ADDON = ...
 local MODULE_NAME = "addon"
 
+-- Globals cache
+local print
+	= print;
+
 ADDON[1] = {} -- MRB, Addon
 ADDON[2] = {} -- C, Config
-ADDON[3] = {} -- L, Locale
+ADDON[3] = setmetatable({}, { -- L, Locale
+	__index = function(t, key)
+		t[key] = key;
+		return key;
+	end,
+});
 local MRB, C = unpack(ADDON)
 
 --[==[@debug@
