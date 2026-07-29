@@ -15,10 +15,6 @@ ADDON[3] = setmetatable({}, { -- L, Locale
 });
 local MRB, C = unpack(ADDON)
 
---[==[@debug@
-_G["MRB"] = MRB --Expose internals on the Plugin lib
---@end-debug@]==]
-
 
 ---------------------------------------------
 -- CONSTANTS
@@ -27,9 +23,6 @@ MRB.ADDON_NAME = ADDON_NAME
 MRB.VERSION = (C_AddOns and C_AddOns.GetAddOnMetadata or GetAddOnMetadata)(ADDON_NAME, "Version")
 
 MRB.IS_RELEASE_VERSION = MRB.VERSION:match("^%d+.%d+.%d+$") ~= nil
---[==[@debug@
-MRB.IS_RELEASE_VERSION = false
---@end-debug@]==]
 
 
 ---------------------------------------------
@@ -48,9 +41,7 @@ function MRB:debug(...)
 end
 
 function MRB:trace(...)
-    --[=[@alpha@
-    MRB:debug(...)
-    --@end-alpha@]=]
+    -- do nothing
 end
 
 
