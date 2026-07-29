@@ -9,11 +9,11 @@
 ![GitHub Commit Activity](https://img.shields.io/github/commit-activity/m/DFortun81/MissingRaidBuffs?logo=github&label=Activity&cacheSeconds=600)
 [![Twitch](https://img.shields.io/badge/Twitch-%239146FF?logo=twitch&logoColor=white)](https://www.twitch.tv/crieve)
 <br>
-[![CurseForge](https://cf.way2muchnoise.eu/267285.svg)](https://legacy.curseforge.com/wow/addons/missing-raid-buffs)
+[![CurseForge](https://cf.way2muchnoise.eu/267285.svg)](https://legacy.curseforge.com/wow/addons/missing-raid-buffs-era)
 ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/DFortun81/MissingRaidBuffs/total?logo=github&label=Downloads&cacheSeconds=600)
 [![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=&logo=github&logoColor=white)](https://github.com/DFortun81/MissingRaidBuffs)
-[![CurseForge](https://img.shields.io/badge/CurseForge-%23F16436?logo=CurseForge&logoColor=black)](https://legacy.curseforge.com/wow/addons/missing-raid-buffs)
-[![Wago.io](https://img.shields.io/badge/Wago.io-%231e1e1e)](https://addons.wago.io/addons/missingraidbuffs)
+[![CurseForge](https://img.shields.io/badge/CurseForge-%23F16436?logo=CurseForge&logoColor=black)](https://legacy.curseforge.com/wow/addons/missing-raid-buffs-era)
+[![Wago.io](https://img.shields.io/badge/Wago.io-%231e1e1e)](https://addons.wago.io/addons/missing-raid-buffs-era)
 <br>
 
 ## Features
