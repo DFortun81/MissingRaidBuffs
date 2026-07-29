@@ -1,4 +1,4 @@
-package-as: missing-raid-buffs-era
+package-as: MissingRaidBuffs
 enable-nolib-creation: no
 
 externals:
