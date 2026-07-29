@@ -1,14 +1,19 @@
 local MRB, C, L = unpack(select(2, ...))
 local MODULE_NAME = "config"
 
+-- Globals cache
+local ipairs, pairs, next, type, select, strsplit, tinsert, tremove, C_CreatureInfo, GetSpellInfo, UnitClass
+	= ipairs, pairs, next, type, select, strsplit, tinsert, tremove, C_CreatureInfo, GetSpellInfo, UnitClass;
+
 ---------------------------------------------
 -- CONSTANTS
 ---------------------------------------------
+local PLAYER_CLASS = select(2,UnitClass("player"));
 local IS_CLASSIC = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC)
 local IS_HORDE = UnitFactionGroup("player")=="Horde"
-local IS_PRIEST = select(2,UnitClass("player")) == "PRIEST"
-local IS_MAGE = select(2,UnitClass("player")) == "MAGE"
-local IS_DRUID = select(2,UnitClass("player")) == "DRUID"
+local IS_PRIEST = PLAYER_CLASS == "PRIEST"
+local IS_MAGE = PLAYER_CLASS == "MAGE"
+local IS_DRUID = PLAYER_CLASS == "DRUID"
 
 local SHAMAN_PALADIN_TEXTURE_ICON = IS_HORDE and MRB.Media.TextureIcons.CLASS_TEXTURE_ICONS.SHAMAN or MRB.Media.TextureIcons.CLASS_TEXTURE_ICONS.PALADIN
 
@@ -668,11 +673,6 @@ configPanes.general = AceConfigDialog:AddToBlizOptions(MRB.ADDON_NAME, MRB.ADDON
 configPanes.profiles = AceConfigDialog:AddToBlizOptions(MRB.ADDON_NAME, L_PROFILES, MRB.ADDON_NAME, "profiles")
 --configPanes.auras = AceConfigDialog:AddToBlizOptions(MRB.ADDON_NAME, L_BUFFS, MRB.ADDON_NAME, "auras")
 C.GENERAL_OPTIONS = configPanes.general.name
-print(C.GENERAL_OPTIONS);
-
-function refreshConfig(db, ...)
-    print("refreshConfig", db, ...)
-end
 
 function C:reloadDB()
     self:upgradeDB()

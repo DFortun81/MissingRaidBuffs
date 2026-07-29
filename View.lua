@@ -1,6 +1,12 @@
 local MRB, C, L = unpack(select(2, ...))
 local MODULE_NAME = "View"
 
+-- Globals cache
+local ipairs, pairs, select, tinsert, UnitClass, UnitName, UnitAffectingCombat, math_floor
+	= ipairs, pairs, select, tinsert, UnitClass, UnitName, UnitAffectingCombat, math.floor;
+local UnitInParty, UnitInRaid, GetRaidRosterInfo, GetNumGroupMembers, table_sort, UnitInRange, GetClassColorObj
+	= UnitInParty, UnitInRaid, GetRaidRosterInfo, GetNumGroupMembers, table.sort, UnitInRange, GetClassColorObj;
+
 
 ---------------------------------------------
 -- LOCALIZATION
@@ -119,7 +125,7 @@ local function handleModelUpdate(event, ...)
 
     -- sort
     local playerGroup = getGroupId("player")
-    table.sort(orderedPlayersWithMissingBuffs, function(e1, e2)
+    table_sort(orderedPlayersWithMissingBuffs, function(e1, e2)
         -- Group assignments
         if ( GetNumGroupMembers() >= C:get("FilterGroupSize") ) then
             local assignedGroup1 = C:is("GroupAssignments/group" .. getGroupId(e1.key))
@@ -479,7 +485,7 @@ end
 
 function MissingRaidBuffsListViewScrollFrameMixIn:OnSizeChanged()
     -- recalculate number of displayed buttons
-    self.numDisplayedButtons = math.floor(self:GetHeight() / (BUTTON_HEIGHT+BUTTON_MARGIN))
+    self.numDisplayedButtons = math_floor(self:GetHeight() / (BUTTON_HEIGHT+BUTTON_MARGIN))
 
     -- hide buttons that are no longer needed
     local buttons = self:GetButtons()

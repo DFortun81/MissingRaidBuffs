@@ -3,6 +3,9 @@ local MODULE_NAME = "media"
 
 MRB.Media = {}
 
+-- Globals cache
+local select, unpack, table, GetSpellInfo
+	= select, unpack, table, GetSpellInfo;
 
 ---------------------------------------------
 -- CONSTANTS

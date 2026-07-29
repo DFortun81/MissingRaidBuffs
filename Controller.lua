@@ -1,6 +1,11 @@
 local MRB, C, L = unpack(select(2, ...))
 local MODULE_NAME = "Controller"
 
+-- Globals cache
+local ipairs, tinsert, UnitName, BUFF_MAX_DISPLAY
+	= ipairs, tinsert, UnitName, BUFF_MAX_DISPLAY;
+local UnitBuff, UnitIsConnected, UnitIsDeadOrGhost, UnitInParty, UnitInRaid, GetNumGroupMembers, GetNumSubgroupMembers
+	= UnitBuff, UnitIsConnected, UnitIsDeadOrGhost, UnitInParty, UnitInRaid, GetNumGroupMembers, GetNumSubgroupMembers;
 
 ---------------------------------------------
 -- CONSTANTS
