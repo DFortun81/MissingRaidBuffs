@@ -28,6 +28,22 @@ local ARCANE_BRILLIANCE_SPELLID = 23028
 local MARK_OF_THE_WILD_SPELLID = 1126
 local GIFT_OF_THE_WILD_SPELLID = 21849
 
+-- Switch the desired spellIDs based on the game flavor
+local version = select(7, GetBuildInfo());
+if version >= 20000 then
+	-- TBC Raid Buffs
+	POWER_WORD_FORTITUDE_SPELLID = 25389	-- Power Word: Fortitude (Rank 7)
+	PRAYER_OF_FORTITUDE_SPELLID = 25392	-- Prayer of Fortitude (Rank 3)
+	DIVINE_SPIRIT_SPELLID = 25312	-- Divine Spirit (Rank 5)
+	PRAYER_OF_SPIRIT_SPELLID = 32999	-- Prayer of Spirit (Rank 2)
+	SHADOW_PROTECTION_SPELLD = 25433	-- Shadow Protection (Rank 4)
+	PRAYER_OF_SHADOW_PROTECTION_SPELLID = 39374	-- Prayer of Shadow Protection (Rank 2)
+	ARCANE_INTELLECT_SPELLID = 27126	-- Arcane Intellect (Rank 6)
+	ARCANE_BRILLIANCE_SPELLID = 27127	-- Arcane Brilliance (Rank 2)
+	MARK_OF_THE_WILD_SPELLID = 26990	-- Mark of the Wild (Rank 8)
+	GIFT_OF_THE_WILD_SPELLID = 26991	-- Gift of the Wild (Rank 3)
+end
+
 ---------------------------------------------
 -- LOCALIZATION
 ---------------------------------------------

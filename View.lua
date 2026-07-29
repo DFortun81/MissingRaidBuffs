@@ -28,8 +28,6 @@ local BUTTON_HEIGHT = 16
 local BUTTON_MARGIN = 0
 local TEXTURE_SCALING = 0.04
 
-local FORTITUDE_BUFF_TEXTURE = 135941
-
 
 ---------------------------------------------
 -- VARIABLES
