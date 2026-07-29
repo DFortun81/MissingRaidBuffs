@@ -1,6 +1,8 @@
 # This is a workflow to package and upload on CurseForge and GitHub Releases using BigWigs/Packager
 
 name: Release
+permissions:
+  contents: write
 
 # Controls when the action will run.
 on:
