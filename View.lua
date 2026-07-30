@@ -296,23 +296,25 @@ function MissingRaidBuffsListViewQuickSelectMixIn:Update()
 
     local previous = nil
     for index,buff in ipairs(C:GetAllBuffs()) do
-        local button = self.buttons:Acquire()
-        button:SetID(index)
+		if buff.Visible then
+			local button = self.buttons:Acquire()
+			button:SetID(index)
 
-        local enabled, spellName, texture = C:GetBuffInfo(index)
-        button.tooltipText = spellName
-        button.Icon:SetTexture(texture)
-        button.Icon:SetDesaturated( not buff.Enabled)
-        button.Highlight:SetShown(buff.Enabled)
+			local enabled, spellName, texture = C:GetBuffInfo(index)
+			button.tooltipText = spellName
+			button.Icon:SetTexture(texture)
+			button.Icon:SetDesaturated( not buff.Enabled)
+			button.Highlight:SetShown(buff.Enabled)
 
-        if ( previous == nil ) then
-            button:SetPoint("RIGHT", self, "RIGHT", -4, 0)
-        else
-            button:SetPoint("RIGHT", previous, "LEFT", -4, 0)
-        end
-        button:Show()
+			if ( previous == nil ) then
+				button:SetPoint("RIGHT", self, "RIGHT", -4, 0)
+			else
+				button:SetPoint("RIGHT", previous, "LEFT", -4, 0)
+			end
+			button:Show()
 
-        previous = button
+			previous = button
+		end
     end
 end
 

@@ -9,7 +9,7 @@ local ipairs, pairs, next, type, select, strsplit, tinsert, tremove, C_CreatureI
 -- CONSTANTS
 ---------------------------------------------
 local PLAYER_CLASS = select(2,UnitClass("player"));
-local IS_HORDE = UnitFactionGroup("player")=="Horde"
+local IS_ALLIANCE = UnitFactionGroup("player")~="Horde"
 local IS_PRIEST = PLAYER_CLASS == "PRIEST"
 local IS_MAGE = PLAYER_CLASS == "MAGE"
 local IS_DRUID = PLAYER_CLASS == "DRUID"
@@ -152,7 +152,7 @@ local function recreateBuffsDatatype()
     }
 
     for key,details in ipairs(db.profile.Auras) do
-        if ( details.Enabled ) then
+        if details.Enabled and details.Visible then
             tinsert(buffsDatatype.List, key)
             for _,spellId in ipairs(details.Spells) do
                 local buffname = GetSpellInfo(spellId)
@@ -254,7 +254,8 @@ C.DEFAULT_DB = {
         },
         ["Auras"] = {
             { -- "Power Word: Fortitude"
-                ["Enabled"] = IS_PRIEST,
+                Enabled = IS_PRIEST,
+				Visible = true,
                 Spells = {
                     POWER_WORD_FORTITUDE_SPELLID,
                     PRAYER_OF_FORTITUDE_SPELLID
@@ -278,7 +279,8 @@ C.DEFAULT_DB = {
 				},
             },
             { -- "Divine Spirit"
-                ["Enabled"] = IS_PRIEST, -- and has divine spirit talent
+                Enabled = IS_PRIEST, -- and has divine spirit talent
+				Visible = true,
                 Spells = {
                     DIVINE_SPIRIT_SPELLID,
                     PRAYER_OF_SPIRIT_SPELLID
@@ -302,7 +304,8 @@ C.DEFAULT_DB = {
 				},
             },
             { -- "Shadow Protection"
-                ["Enabled"] = false,
+                Enabled = false,
+				Visible = true,
                 Spells = {
                     SHADOW_PROTECTION_SPELLID,
                     PRAYER_OF_SHADOW_PROTECTION_SPELLID
@@ -326,7 +329,8 @@ C.DEFAULT_DB = {
 				},
             },
             { -- "Arcane Intellect"
-                ["Enabled"] = IS_MAGE,
+                Enabled = IS_MAGE,
+				Visible = true,
                 Spells = {
                     ARCANE_INTELLECT_SPELLID,
                     ARCANE_BRILLIANCE_SPELLID
@@ -350,7 +354,8 @@ C.DEFAULT_DB = {
 				},
             },
             { -- "Mark of the Wild"
-                ["Enabled"] = IS_DRUID,
+                Enabled = IS_DRUID,
+				Visible = true,
                 Spells = {
                     MARK_OF_THE_WILD_SPELLID,
                     GIFT_OF_THE_WILD_SPELLID
@@ -374,7 +379,8 @@ C.DEFAULT_DB = {
 				},
             },
 			{ -- "Blessing of Kings"
-                ["Enabled"] = IS_PALADIN,
+                Enabled = IS_PALADIN,
+				Visible = version >= 20000 or IS_ALLIANCE,
                 Spells = {
                     BLESSING_OF_KINGS_SPELLID,
                     GREATER_BLESSING_OF_KINGS_SPELLID
@@ -398,7 +404,8 @@ C.DEFAULT_DB = {
 				},
             },
 			{ -- "Blessing of Might"
-                ["Enabled"] = IS_PALADIN,
+                Enabled = IS_PALADIN,
+				Visible = version >= 20000 or IS_ALLIANCE,
                 Spells = {
                     BLESSING_OF_MIGHT_SPELLID,
                     GREATER_BLESSING_OF_MIGHT_SPELLID
@@ -422,7 +429,8 @@ C.DEFAULT_DB = {
 				},
             },
 			{ -- "Blessing of Wisdom"
-                ["Enabled"] = IS_PALADIN,
+                Enabled = IS_PALADIN,
+				Visible = version >= 20000 or IS_ALLIANCE,
                 Spells = {
                     BLESSING_OF_WISDOM_SPELLID,
                     GREATER_BLESSING_OF_WISDOM_SPELLID
@@ -446,7 +454,8 @@ C.DEFAULT_DB = {
 				},
             },
 			{ -- "Blessing of Salvation"
-                ["Enabled"] = false,
+                Enabled = false,
+				Visible = version >= 20000 or IS_ALLIANCE,
                 Spells = {
                     BLESSING_OF_SALVATION_SPELLID,
                     GREATER_BLESSING_OF_SALVATION_SPELLID
@@ -470,7 +479,8 @@ C.DEFAULT_DB = {
 				},
             },
 			{ -- "Blessing of Sanctuary"
-                ["Enabled"] = false,
+                Enabled = false,
+				Visible = version >= 20000 or IS_ALLIANCE,
                 Spells = {
                     BLESSING_OF_SANCTUARY_SPELLID,
                     GREATER_BLESSING_OF_SANCTUARY_SPELLID
