@@ -28,6 +28,8 @@ local MARK_OF_THE_WILD_SPELLID = 9885	-- Mark of the Wild (Rank 7)
 local GIFT_OF_THE_WILD_SPELLID = 21849	-- Gift of the Wild (Rank 1)
 local BLESSING_OF_KINGS_SPELLID = 20217	-- Blessing of Kings
 local GREATER_BLESSING_OF_KINGS_SPELLID = 25898	-- Greater Blessing of Kings
+local BLESSING_OF_LIGHT_SPELLID = 19979	-- Blessing of Light (Rank 3)
+local GREATER_BLESSING_OF_LIGHT_SPELLID = 25890	-- Greater Blessing of Light
 local BLESSING_OF_MIGHT_SPELLID = 25291	-- Blessing of Might (Rank 7)
 local GREATER_BLESSING_OF_MIGHT_SPELLID = 25916	-- Greater Blessing of Might (Rank 2)
 local BLESSING_OF_WISDOM_SPELLID = 25290	-- Blessing of Wisdom (Rank 6)
@@ -453,8 +455,33 @@ C.DEFAULT_DB = {
 					["NONE"] = true,
 				},
             },
+			{ -- "Blessing of Light"
+                Enabled = IS_PALADIN,
+				Visible = version >= 20000 or IS_ALLIANCE,
+                Spells = {
+                    BLESSING_OF_LIGHT_SPELLID,
+                    GREATER_BLESSING_OF_LIGHT_SPELLID
+                },
+                Filters = {
+                    ["DRUID"] = true,
+                    ["HUNTER"] = true,
+                    ["MAGE"] = true,
+                    ["PALADIN"] = true,
+                    ["PRIEST"] = true,
+                    ["ROGUE"] = true,
+                    ["SHAMAN"] = true,
+                    ["WARLOCK"] = true,
+                    ["WARRIOR"] = true,
+                },
+				Roles = {
+					["TANK"] = false,
+					["HEALER"] = true,
+					["DAMAGER"] = true,
+					["NONE"] = true,
+				},
+            },
 			{ -- "Blessing of Salvation"
-                Enabled = false,
+                Enabled = IS_PALADIN,
 				Visible = version >= 20000 or IS_ALLIANCE,
                 Spells = {
                     BLESSING_OF_SALVATION_SPELLID,
