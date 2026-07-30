@@ -368,7 +368,6 @@ end
 
 function MissingRaidBuffsListViewButtonMixIn:OnUpdate()
     local inRange, checkedRange = UnitInRange(self.unit);
-    self.OutOfRangeIcon:SetShown(checkedRange and not inRange)
     if ( checkedRange and not inRange ) then
         self:SetAlpha(0.55);
     else

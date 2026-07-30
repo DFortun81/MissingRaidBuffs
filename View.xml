@@ -33,12 +33,6 @@
 					</Anchors>
 					<Color r="0.8313725" g="0.68627" b="0.215686" />
 				</Texture>
-				<Texture parentKey="OutOfRangeIcon" file="Interface\RaidFrame\ReadyCheck-NotReady" ignoreParentAlpha="true">
-					<Size x="14" y="14" />
-					<Anchors>
-						<Anchor point="CENTER" />
-					</Anchors>
-				</Texture>
 			</Layer>
 		</Layers>
 		<Frames>
