@@ -561,7 +561,7 @@ MRB.RegisterCallback(MODULE_NAME, "initialize", function()
     C.RegisterListener(MODULE_NAME, "HideWhenEmpty", handleOptionsChanged)
     C.RegisterListener(MODULE_NAME, "HideWhenInCombat", handleOptionsChanged)
     C.RegisterListener(MODULE_NAME, "HideWhenNotInGroup", handleOptionsChanged)
-
+	C.RegisterListener(MODULE_NAME, "MaxRanksOnly", function() C:RefreshOnlyMaxRanks(); end)
     C.RegisterListener(MODULE_NAME, "FilterGroupSize", handleModelUpdate)
     C.RegisterListener(MODULE_NAME, "ShowAllGroups", handleModelUpdate)
     C.RegisterListener(MODULE_NAME, "GroupAssignments/group1", handleModelUpdate)

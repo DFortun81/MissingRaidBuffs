@@ -50,13 +50,12 @@ local function updateUnitBuffs(unit)
     -- Determine what required buffs are missing
     for buffId = 1,BUFF_MAX_DISPLAY do
         local name, icon, _, debuffType, _, _, _, _, _, spellId = UnitBuff(unit, buffId)
-        if ( not spellId ) then
-            break
-        end
-		local buffIndex = buffMapping[spellId];
-        if buffIndex then -- unit has buff that is required
-            missingBuffs[buffIndex] = nil
-        end
+        if spellId then
+			local buffIndex = buffMapping[spellId] or (name and buffMapping[name]);
+			if buffIndex then missingBuffs[buffIndex] = nil end
+		else
+			break;
+		end
     end
 
     -- Determine unit status
@@ -71,7 +70,7 @@ local function updateUnitBuffs(unit)
     -- Translate to sorted list
     local missing = {}
     for _,required in ipairs(requiredBuffs) do
-        if ( missingBuffs[required] ) then
+        if missingBuffs[required] then
             tinsert(missing, required)
         end
     end

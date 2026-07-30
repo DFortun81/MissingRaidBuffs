@@ -14,6 +14,8 @@ local IS_PRIEST = PLAYER_CLASS == "PRIEST"
 local IS_MAGE = PLAYER_CLASS == "MAGE"
 local IS_DRUID = PLAYER_CLASS == "DRUID"
 local IS_PALADIN = PLAYER_CLASS == "PALADIN"
+local PLAYER_LEVEL = UnitLevel("player");
+local MAX_LEVEL = 60
 
 -- Classic Raid Buffs
 local POWER_WORD_FORTITUDE_SPELLID = 10938	-- Power Word: Fortitude (Rank 6)
@@ -43,6 +45,7 @@ local GREATER_BLESSING_OF_SANCTUARY_SPELLID = 25899	-- Greater Blessing of Sanct
 local version = select(7, GetBuildInfo());
 if version >= 20000 then
 	-- TBC Raid Buffs
+	MAX_LEVEL = 70
 	POWER_WORD_FORTITUDE_SPELLID = 25389	-- Power Word: Fortitude (Rank 7)
 	PRAYER_OF_FORTITUDE_SPELLID = 25392	-- Prayer of Fortitude (Rank 3)
 	DIVINE_SPIRIT_SPELLID = 25312	-- Divine Spirit (Rank 5)
@@ -163,10 +166,23 @@ local function recreateBuffsDatatype()
             end
         end
     end
+	
+	-- For non-max level players, only match by the name rather than the exact spellID.
+	PLAYER_LEVEL = UnitLevel("player");
+	if PLAYER_LEVEL < MAX_LEVEL or not C:is("MaxRanksOnly") then
+		for _,key in ipairs(buffsDatatype.List) do
+			local details = db.profile.Auras[key];
+			for _,spellId in ipairs(details.Spells) do
+				local buffname = GetSpellInfo(spellId)
+				if buffname then
+					buffsDatatype.Mapping[buffname] = key
+				end
+			end
+		end
+	end
 
     --DevTools_Dump({buffsDatatype})
 end
-
 
 ---------------------------------------------
 -- CONFIG METHODS
@@ -225,6 +241,11 @@ function C:ToggleBuff(buffIndex)
     optionListeners:Fire("updateBuffs")
 end
 
+function C:RefreshOnlyMaxRanks()
+    recreateBuffsDatatype()
+    optionListeners:Fire("updateBuffs")
+end
+
 function C:GetBuffInfo(buffIndex)
     local buff = db.profile.Auras[buffIndex]
     local spellName, _, texture = GetSpellInfo(buff.Spells[1])
@@ -243,6 +264,7 @@ C.DEFAULT_DB = {
         ["HideWhenEmpty"] = false, -- false by default so initial users can position windows
         ["HideWhenInCombat"] = false,
         ["HideWhenNotInGroup"] = false,
+		["MaxRanksOnly"] = true,
         ["FilterGroupSize"] = 15,
         ["ShowAllGroups"] = false,
         ["GroupAssignments"] = {
@@ -648,6 +670,16 @@ local MRBConfigTable = {
                     width = "full",
                     arg = "HideWhenNotInGroup"
                 },
+				maxRanksOnly = {
+					order = 70,
+					type = "toggle",
+					name = "Max Ranks Only",
+					desc = "Whether or not to only detect Max Ranks of spells.\n\nThis setting is automatically ignored on non-max level characters.",
+                    set = setOption,
+                    get = getOption,
+                    width = "full",
+					arg = "MaxRanksOnly"
+				},
                 debug = {
                     order = 100,
                     type = "toggle",
