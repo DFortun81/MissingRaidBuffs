@@ -377,9 +377,14 @@ function MissingRaidBuffsListViewButtonMixIn:OnUpdate()
 end
 
 function MissingRaidBuffsListViewButtonMixIn:SetPlayerBuffs(unit, data)
-    self.Name:SetText(UnitName(unit) or "??")
-	local className = select(2,UnitClass(unit))
-	if className then
+	local playerName = UnitName(unit) or "??";
+	if self.lastPlayerName ~= playerName then
+		self.lastPlayerName = playerName;
+		self.Name:SetText(playerName)
+	end
+	local _,className = UnitClass(unit)
+	if className and self.lastClassName ~= className then
+		self.lastClassName = className;
 		self.Background:SetStatusBarColor(GetClassColorObj(className):GetRGB())
 	end
 
@@ -408,11 +413,11 @@ function MissingRaidBuffsListViewButtonMixIn:SetPlayerBuffs(unit, data)
     else
         self.Status:SetText("")
         local previous = null
-        for _,buff in ipairs(data.missingBuffs) do
+        for _,buffIndex in ipairs(data.missingBuffs) do
             local texture = MissingRaidBuffsListView.ScrollFrame.auraTexturePool:Acquire()
             texture:SetDrawLayer("ARTWORK", 2) -- change the texture sublevel so it renders above the statusbar
 
-            local enabled, spellNamme, spellTexture = C:GetBuffInfo(buff)
+            local enabled, spellName, spellTexture = C:GetBuffInfo(buffIndex)
             texture:SetTexture(spellTexture)
             texture:SetTexCoord(0+TEXTURE_SCALING, 1-TEXTURE_SCALING, 0+TEXTURE_SCALING, 1-TEXTURE_SCALING)
             texture:SetSize(14, 14)

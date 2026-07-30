@@ -157,8 +157,7 @@ local function recreateBuffsDatatype()
         if details.Enabled and details.Visible then
             tinsert(buffsDatatype.List, key)
             for _,spellId in ipairs(details.Spells) do
-                local buffname = GetSpellInfo(spellId)
-                buffsDatatype.Mapping[buffname] = key
+                buffsDatatype.Mapping[spellId] = key
             end
         end
     end
@@ -209,8 +208,8 @@ function C:BuffIsEnabled(buffIndex)
     return db.profile.Auras[buffIndex].Enabled
 end
 
-function C:BuffIsRequiredForClass(playerName, buff)
-	local aura = db.profile.Auras[buff];
+function C:BuffIsRequiredForClass(playerName, buffIndex)
+	local aura = db.profile.Auras[buffIndex];
 	if aura.Enabled then
 		return aura.Filters[select(2, UnitClass(playerName))] and aura.Roles[UnitGroupRolesAssigned(playerName)]
 	end
@@ -474,7 +473,7 @@ C.DEFAULT_DB = {
                     ["WARRIOR"] = true,
                 },
 				Roles = {
-					["TANK"] = false,
+					["TANK"] = true,
 					["HEALER"] = true,
 					["DAMAGER"] = true,
 					["NONE"] = true,

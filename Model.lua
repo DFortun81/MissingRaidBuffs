@@ -12,14 +12,15 @@ MRB.Model.callbacks = LibStub("CallbackHandler-1.0"):New(MRB.Model)
 
 
 function MRB.Model:SetPlayerStatus(unit, status)
-    if ( MRB.Model.playerBuffCache[unit] and MRB.Model.playerBuffCache[unit].status ~= status ) then
-        MRB.Model.playerBuffCache[unit].status = status
+	local cache = MRB.Model.playerBuffCache[unit];
+    if cache and cache.status ~= status then
+        cache.status = status
         MRB.Model.callbacks:Fire("updatedModel", unit)
     end
 end
 
 function MRB.Model:SetPlayerBuff(unit, missingBuffs, status)
-    if ( #missingBuffs <= 0 ) then
+    if #missingBuffs <= 0 then
         MRB.Model.playerBuffCache[unit] = nil
     else
         MRB.Model.playerBuffCache[unit] = {
