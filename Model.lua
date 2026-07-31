@@ -39,10 +39,3 @@ end
 function MRB.Model:Get()
     return MRB.Model.playerBuffCache
 end
-
-
-
-
-MRB.Model.RegisterCallback(MRB.ADDON_NAME .. ".debug", "updatedModel", function(...)
-    MRB:debug(...)
-end)
