@@ -18,9 +18,10 @@ local COMBATLOG_OBJECT_AFFILIATION_RAID_OR_PARTY = bit.bor(COMBATLOG_OBJECT_AFFI
 -- UTILITIES
 ---------------------------------------------
 local function isUnitAllowed(unit)
-	return unit == "player"
-		or (UnitInRaid("player") and unit:match("^raid%d+$"))
-		or (UnitInParty("player") and unit:match("^party%d+$"))
+	if UnitInRaid("player") then
+		return unit:match("^raid%d+$")
+	end
+	return unit == "player" or (UnitInParty("player") and unit:match("^party%d+$"))
 end
 
 
