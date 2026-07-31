@@ -39,19 +39,6 @@ local openToCategory = Settings and Settings.OpenToCategory or InterfaceOptionsF
 
 
 ---------------------------------------------
--- UTILITIES
----------------------------------------------
-local function contains(t, value)
-    for i,v in ipairs(t) do
-        if ( v == value ) then
-            return true
-        end
-    end
-    return false
-end
-
-
----------------------------------------------
 -- LIST VIEW
 ---------------------------------------------
 local function showHideFrame()

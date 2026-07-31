@@ -9,6 +9,7 @@ ADDON[1] = {} -- MRB, Addon
 ADDON[2] = {} -- C, Config
 ADDON[3] = setmetatable({}, { -- L, Locale
 	__index = function(t, key)
+		-- When a locale is not found, use the key (English) as the localization until a proper one is made
 		t[key] = key;
 		return key;
 	end,
