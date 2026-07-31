@@ -23,8 +23,6 @@ local MRB, C = unpack(ADDON)
 MRB.ADDON_NAME = ADDON_NAME
 MRB.VERSION = (C_AddOns and C_AddOns.GetAddOnMetadata or GetAddOnMetadata)(ADDON_NAME, "Version")
 
-MRB.IS_RELEASE_VERSION = MRB.VERSION:match("^%d+.%d+.%d+$") ~= nil
-
 
 ---------------------------------------------
 -- EVENTS & CALLBACKS

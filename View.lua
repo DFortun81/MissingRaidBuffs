@@ -365,19 +365,17 @@ function MissingRaidBuffsListViewButtonMixIn:SetPlayerBuffs(unit, data)
     if ( self:IsProtected() ) then
         self:SetAttribute("unit", unit)
         self:SetAttribute("type1", "target");
-        if ( data.status == MRB.Model.Status.ALIVE ) then
+        --if ( data.status == MRB.Model.Status.ALIVE ) then
             -- find first misingbuff that the player can cast
             -- cast group buff if 3 or more group members need that buff
             -- else cast individual buff
-        end
+        --end
     end
 
     -- Show hide PreferredIcon
-    local unitGroupId = getGroupId(unit)
-    local isPreferred = GetNumGroupMembers() >= C:get("FilterGroupSize")
-            and C:is("GroupAssignments/group" .. unitGroupId)
-            and C:is("ShowAllGroups")
-    self.PreferredTexture:SetShown(isPreferred)
+    self.PreferredTexture:SetShown(C:is("ShowAllGroups")
+		and GetNumGroupMembers() >= C:get("FilterGroupSize")
+		and C:is("GroupAssignments/group" .. getGroupId(unit)))
 
     if ( data.status == MRB.Model.Status.DEAD ) then
         self.Status:SetText(L_DEAD)
@@ -385,7 +383,7 @@ function MissingRaidBuffsListViewButtonMixIn:SetPlayerBuffs(unit, data)
         self.Status:SetText(L_OFFLINE)
     else
         self.Status:SetText("")
-        local previous = null
+        local previous
         for _,buffIndex in ipairs(data.missingBuffs) do
             local texture = MissingRaidBuffsListView.ScrollFrame.auraTexturePool:Acquire()
             texture:SetDrawLayer("ARTWORK", 2) -- change the texture sublevel so it renders above the statusbar
@@ -395,10 +393,10 @@ function MissingRaidBuffsListViewButtonMixIn:SetPlayerBuffs(unit, data)
             texture:SetTexCoord(0+TEXTURE_SCALING, 1-TEXTURE_SCALING, 0+TEXTURE_SCALING, 1-TEXTURE_SCALING)
             texture:SetSize(14, 14)
             texture:SetParent(self)
-            if ( previous == nil ) then
-                texture:SetPoint("RIGHT", self, "RIGHT", -2, 0)
-            else
+            if previous then
                 texture:SetPoint("RIGHT", previous, "LEFT", -2, 0)
+            else
+                texture:SetPoint("RIGHT", self, "RIGHT", -2, 0)
             end
             texture:Show()
             previous = texture

@@ -559,7 +559,7 @@ local MRBConfigTable = {
                 show = {
                     order = 10,
                     type = "toggle",
-                    name = SHOW,
+                    name = L["Show window"],
                     desc = L["Show the Missing Raid Buffs frame"],
                     set = setOption,
                     get = getOption,
@@ -793,7 +793,7 @@ local MRBConfigTable = {
                     width = "normal"
                 },
                 currentProfile = {
-                    order = 1,
+                    order = 2,
                     type = "description",
                     name = function() return db:GetCurrentProfile() end,
                     width = "double"
@@ -802,7 +802,7 @@ local MRBConfigTable = {
         },
     },
 }
-AceConfigRegistry:RegisterOptionsTable(MRB.ADDON_NAME, MRBConfigTable, MRB.IS_RELEASE_VERSION)
+AceConfigRegistry:RegisterOptionsTable(MRB.ADDON_NAME, MRBConfigTable, true)
 
 local AceConfigDialog = LibStub("AceConfigDialog-3.0")
 local configPanes = {}

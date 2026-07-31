@@ -26,7 +26,7 @@
 			</Layer>
 			<Layer level="OVERLAY">
 				<Texture parentKey="PreferredTexture" hidden="true">
-					<Size x="2" />
+					<Size x="4" />
 					<Anchors>
 						<Anchor point="TOPRIGHT" relativeKey="$parent.Name" relativePoint="TOPLEFT" x="-1" />
 						<Anchor point="BOTTOMRIGHT" relativeKey="$parent.Name" relativePoint="BOTTOMLEFT" x="-1" y="1" />
