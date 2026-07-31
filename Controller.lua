@@ -93,23 +93,20 @@ local function updateUnitStatus(unit)
     MRB.Model:SetPlayerStatus(unit, status)
 end
 
-local function refreshAllPartyRaidBuffs(...)
+local function refreshAllPartyRaidBuffs()
     MRB.Model:RemoveAll()
-    if ( UnitInRaid("player") ) then
+    if UnitInRaid("player") then
         for raidId = 1,GetNumGroupMembers() do
             updateUnitBuffs("raid"..raidId)
         end
-
-    elseif ( UnitInParty("player") ) then
-        for partyId = 1,GetNumSubgroupMembers() do
-            updateUnitBuffs("party"..partyId)
-        end
-        updateUnitBuffs("player")
-
     else
-        updateUnitBuffs("player")
-    end
-
+		if UnitInParty("player") then
+			for partyId = 1,GetNumSubgroupMembers() do
+				updateUnitBuffs("party"..partyId)
+			end
+		end
+		updateUnitBuffs("player")
+	end
 end
 
 
