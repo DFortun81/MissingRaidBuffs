@@ -19,7 +19,7 @@ local MAX_LEVEL = 60
 
 -- Classic Raid Buffs
 local POWER_WORD_FORTITUDE_SPELLID = 10938	-- Power Word: Fortitude (Rank 6)
-local PRAYER_OF_FORTITUDE_SPELLID = 21562	-- Prayer of Fortitude (Rank 1)
+local PRAYER_OF_FORTITUDE_SPELLID = 21564	-- Prayer of Fortitude (Rank 2)
 local DIVINE_SPIRIT_SPELLID = 27841	-- Divine Spirit (Rank 4)
 local PRAYER_OF_SPIRIT_SPELLID = 27681	-- Prayer of Spirit (Rank 1)
 local SHADOW_PROTECTION_SPELLID = 10958	-- Shadow Protection (Rank 3)
