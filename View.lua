@@ -97,23 +97,14 @@ local function getGroupId(unit)
     return 1
 end
 
-local function shouldInclude(unit)
-    local groupsize = GetNumGroupMembers()
-    local filterGroupSize = C:get("FilterGroupSize")
-    local groupid = getGroupId(unit)
-
-    return groupsize < filterGroupSize
-        or ( groupsize >= filterGroupSize and C:is("GroupAssignments/group" .. groupid) )
-        or ( groupsize >= filterGroupSize and C:is("ShowAllGroups") )
-end
-
 local function handleModelUpdate(event, ...)
     orderedPlayersWithMissingBuffs = {}
     MRB.orderedPlayersWithMissingBuffs = orderedPlayersWithMissingBuffs
 
     -- convert map to array
+	local shouldIncludeAll = GetNumGroupMembers() < C:get("FilterGroupSize") or C:is("ShowAllGroups");
     for unit,data in pairs(MRB.Model:Get()) do
-        if ( shouldInclude(unit) ) then
+        if shouldIncludeAll or C:is("GroupAssignments/group" .. getGroupId(unit)) then
             tinsert(orderedPlayersWithMissingBuffs, {
                 key = unit,
                 value = data
