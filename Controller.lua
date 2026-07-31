@@ -2,10 +2,10 @@ local MRB, C, L = unpack(select(2, ...))
 local MODULE_NAME = "Controller"
 
 -- Globals cache
-local ipairs, tinsert, UnitName, BUFF_MAX_DISPLAY
-	= ipairs, tinsert, UnitName, BUFF_MAX_DISPLAY;
-local UnitBuff, UnitIsConnected, UnitIsDeadOrGhost, UnitInParty, UnitInRaid, GetNumGroupMembers, GetNumSubgroupMembers
-	= UnitBuff, UnitIsConnected, UnitIsDeadOrGhost, UnitInParty, UnitInRaid, GetNumGroupMembers, GetNumSubgroupMembers;
+local ipairs, tinsert, BUFF_MAX_DISPLAY
+	= ipairs, tinsert, BUFF_MAX_DISPLAY;
+local UnitBuff, UnitInParty, UnitInRaid, GetNumGroupMembers, GetNumSubgroupMembers, UnitClass, UnitGroupRolesAssigned
+	= UnitBuff, UnitInParty, UnitInRaid, GetNumGroupMembers, GetNumSubgroupMembers, UnitClass, UnitGroupRolesAssigned;
 
 ---------------------------------------------
 -- CONSTANTS
@@ -28,65 +28,31 @@ end
 -- TRACK BUFFS
 ---------------------------------------------
 local function updateUnitBuffs(unit)
-    if ( not isUnitAllowed(unit) ) then
-        return
-    end
-
-    local unitname = UnitName(unit)
-
-    local buffMapping = C:GetBuffMapping()
-    local requiredBuffs = C:GetEnabledBuffs()
-    local missingBuffs = {}
-    for _,requiredBuff in ipairs(requiredBuffs) do
-        if C:BuffIsRequiredForClass(unitname, requiredBuff) then
-            missingBuffs[requiredBuff] = true
-        end
-    end
-
-    -- Determine what required buffs are missing
-    for buffId = 1,BUFF_MAX_DISPLAY do
-        local name, icon, _, debuffType, _, _, _, _, _, spellId = UnitBuff(unit, buffId)
-        if spellId then
-			local buffIndex = buffMapping[spellId] or (name and buffMapping[name]);
-			if buffIndex then missingBuffs[buffIndex] = nil end
-		else
-			break;
+    if isUnitAllowed(unit) then
+		-- Determine what mapped buffs are on the unit
+		local cache = {};
+		local buffMapping = C:GetBuffMapping();
+		for buffId = 1,BUFF_MAX_DISPLAY do
+			local name, icon, _, debuffType, _, _, _, _, _, spellId = UnitBuff(unit, buffId)
+			if spellId then
+				local buffIndex = buffMapping[spellId] or (name and buffMapping[name]);
+				if buffIndex then cache[buffIndex] = true; end
+			else
+				break;
+			end
 		end
-    end
 
-    -- Determine unit status
-    local status = MRB.Model.Status.ALIVE
-    if ( not UnitIsConnected(unit) ) then
-        status = MRB.Model.Status.DISCONNECTED
-    elseif ( UnitIsDeadOrGhost(unit) ) then
-        status = MRB.Model.Status.DEAD
-    end
-
-
-    -- Translate to sorted list
-    local missing = {}
-    for _,required in ipairs(requiredBuffs) do
-        if missingBuffs[required] then
-            tinsert(missing, required)
-        end
-    end
-    MRB.Model:SetPlayerBuff(unit, missing, status)
-end
-
-local function updateUnitStatus(unit)
-    if ( not isUnitAllowed(unit) ) then
-        return
-    end
-
-    -- Determine unit status
-    local status = MRB.Model.Status.ALIVE
-    if ( not UnitIsConnected(unit) ) then
-        status = MRB.Model.Status.DISCONNECTED
-    elseif ( UnitIsDeadOrGhost(unit) ) then
-        status = MRB.Model.Status.DEAD
-    end
-
-    MRB.Model:SetPlayerStatus(unit, status)
+		-- Determine which of the required buffs were not cached on the unit
+		local missing = {}
+		local role = UnitGroupRolesAssigned(unit)
+		local className = select(2, UnitClass(unit))
+		for _,buffIndex in ipairs(C:GetEnabledBuffs()) do
+			if not cache[buffIndex] and C:BuffIsRequiredForClassRole(className, role, buffIndex) then
+				tinsert(missing, buffIndex)
+			end
+		end
+		MRB.Model:SetPlayerBuff(unit, missing)
+	end
 end
 
 local function refreshAllPartyRaidBuffs()
@@ -116,7 +82,9 @@ MRB.RegisterCallback(MODULE_NAME, "initialize", function()
     end)
     -- Make sure to update unit status when flags updated
     MRB.RegisterEvent(MODULE_NAME, "UNIT_HEALTH", function(event, unit)
-        updateUnitStatus(unit)
+        if isUnitAllowed(unit) then
+			MRB.Model:UpdatePlayerStatus(unit)
+		end
     end)
 
     -- Reload all buffs when we first enter the world

@@ -1,4 +1,7 @@
 local MRB, C, L = unpack(select(2, ...))
+local UnitIsConnected, UnitIsDeadOrGhost
+	= UnitIsConnected, UnitIsDeadOrGhost
+
 MRB.Model = {
     playerBuffCache = {},
     Status = {
@@ -10,23 +13,38 @@ MRB.Model = {
 
 MRB.Model.callbacks = LibStub("CallbackHandler-1.0"):New(MRB.Model)
 
-
-function MRB.Model:SetPlayerStatus(unit, status)
-	local cache = MRB.Model.playerBuffCache[unit];
-    if cache and cache.status ~= status then
-        cache.status = status
-        MRB.Model.callbacks:Fire("updatedModel", unit)
+local function DetermineUnitStatus(unit)
+    if not UnitIsConnected(unit) then
+        return MRB.Model.Status.DISCONNECTED
+    elseif UnitIsDeadOrGhost(unit) then
+        return MRB.Model.Status.DEAD
     end
+	return MRB.Model.Status.ALIVE;
 end
 
-function MRB.Model:SetPlayerBuff(unit, missingBuffs, status)
+function MRB.Model:UpdatePlayerStatus(unit)
+	local cache = MRB.Model.playerBuffCache[unit];
+	if cache then
+		local status = DetermineUnitStatus(unit)
+		if cache.status ~= status then
+			cache.status = status
+			MRB.Model.callbacks:Fire("updatedModel", unit)
+		end
+	end
+end
+
+function MRB.Model:SetPlayerBuff(unit, missingBuffs)
     if #missingBuffs <= 0 then
         MRB.Model.playerBuffCache[unit] = nil
     else
-        MRB.Model.playerBuffCache[unit] = {
-            ["missingBuffs"] = missingBuffs,
-            ["status"] = status
-        }
+		local cache = MRB.Model.playerBuffCache[unit];
+		if not cache then
+			cache = {};
+			MRB.Model.playerBuffCache[unit] = cache;
+		end
+		
+		cache.status = DetermineUnitStatus(unit)
+        cache.missingBuffs = missingBuffs
     end
 
     MRB.Model.callbacks:Fire("updatedModel", unit)

@@ -2,8 +2,8 @@ local MRB, C, L = unpack(select(2, ...))
 local MODULE_NAME = "config"
 
 -- Globals cache
-local ipairs, pairs, next, type, select, strsplit, tinsert, tremove, C_CreatureInfo, GetSpellInfo, UnitClass, UnitGroupRolesAssigned
-	= ipairs, pairs, next, type, select, strsplit, tinsert, tremove, C_CreatureInfo, GetSpellInfo, UnitClass, UnitGroupRolesAssigned;
+local ipairs, pairs, next, type, select, strsplit, tinsert, tremove, C_CreatureInfo, GetSpellInfo
+	= ipairs, pairs, next, type, select, strsplit, tinsert, tremove, C_CreatureInfo, GetSpellInfo
 
 ---------------------------------------------
 -- CONSTANTS
@@ -226,10 +226,10 @@ function C:BuffIsEnabled(buffIndex)
     return db.profile.Auras[buffIndex].Enabled
 end
 
-function C:BuffIsRequiredForClass(playerName, buffIndex)
+function C:BuffIsRequiredForClassRole(className, role, buffIndex)
 	local aura = db.profile.Auras[buffIndex];
 	if aura.Enabled then
-		return aura.Filters[select(2, UnitClass(playerName))] and aura.Roles[UnitGroupRolesAssigned(playerName)]
+		return aura.Filters[className] and aura.Roles[role]
 	end
 	return false;
 end
