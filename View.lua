@@ -113,45 +113,64 @@ local function handleModelUpdate(event, ...)
     end
 
     -- sort
-    local playerGroup = getGroupId("player")
-    table_sort(orderedPlayersWithMissingBuffs, function(e1, e2)
-        -- Group assignments
-        if ( GetNumGroupMembers() >= C:get("FilterGroupSize") ) then
-            local assignedGroup1 = C:is("GroupAssignments/group" .. getGroupId(e1.key))
-            local assignedGroup2 = C:is("GroupAssignments/group" .. getGroupId(e2.key))
-            if ( assignedGroup1 ~= assignedGroup2 ) then
-                return assignedGroup1
-            end
-        end
+	if UnitInRaid("player") then
+		-- While in a raid, sort by a little bit more complicated data.
+		local playerGroup = getGroupId("player")
+		local groupSizeFilter = C:get("FilterGroupSize");
+		local numGroupMembers = GetNumGroupMembers();
+		table_sort(orderedPlayersWithMissingBuffs, function(e1, e2)
+			local group1 = getGroupId(e1.key)
+			local group2 = getGroupId(e2.key)
+			
+			-- Group assignments
+			if numGroupMembers >= groupSizeFilter then
+				local assignment = C:is("GroupAssignments/group" .. group1)
+				if assignment ~= C:is("GroupAssignments/group" .. group2) then
+					return assignment
+				end
+			end
+			
+			-- Sort by status (live, dead, disconnected)
+			if ( e1.value.status ~= e2.value.status ) then
+				return e1.value.status < e2.value.status
+			end
+			
+			-- Number of buffs
+			if ( #e1.value.missingBuffs ~= #e2.value.missingBuffs ) then
+			   return #e1.value.missingBuffs > #e2.value.missingBuffs
+			end
+			
+			-- group (starting with your own group)
+			if group1 ~= group2 then
+				if group1 < playerGroup then
+					group1 = group2 + 8
+				end
+				if group2 < playerGroup then
+					group2 = group2 + 8
+				end
+				return group1 < group2
+			end
 
-        -- Sort by status (live, dead, disconnected)
-        if ( e1.value.status ~= e2.value.status ) then
-            return e1.value.status < e2.value.status
-        end
+			-- unit
+			return e2.key > e1.key
+		end)
+	else
+		-- While in a party or by yourself, only sort by status and number of buffs
+		table_sort(orderedPlayersWithMissingBuffs, function(e1, e2)
+			-- Sort by status (live, dead, disconnected)
+			if ( e1.value.status ~= e2.value.status ) then
+				return e1.value.status < e2.value.status
+			end
+			
+			-- Number of buffs
+			if ( #e1.value.missingBuffs ~= #e2.value.missingBuffs ) then
+			   return #e1.value.missingBuffs > #e2.value.missingBuffs
+			end
 
-        -- Number of buffs
-        if ( #e1.value.missingBuffs ~= #e2.value.missingBuffs ) then
-           return #e1.value.missingBuffs > #e2.value.missingBuffs
-        end
-
-        -- group (starting with your own group)
-        if ( UnitInRaid("player") ) then
-            local group1 = getGroupId(e1.key)
-            local group2 = getGroupId(e2.key)
-            if( group1 ~= group2 ) then
-                if ( group1 < playerGroup ) then
-                    group1 = group2 + 8
-                end
-                if ( group2 < playerGroup ) then
-                    group2 = group2 + 8
-                end
-                return group1 < group2
-            end
-        end
-
-        -- unit
-        return e2.key > e1.key
-    end)
+			-- unit
+			return e2.key > e1.key
+		end)
+	end
 
     MissingRaidBuffsListView.ScrollFrame:Update()
 end
@@ -159,11 +178,10 @@ end
 local function handleStartEndCombat(event)
     local self = MissingRaidBuffsListView.ScrollFrame
     local removeButtons = self:GetButtons()
-    if ( event == "PLAYER_REGEN_DISABLED" ) then
+    if event == "PLAYER_REGEN_DISABLED" then
         -- In combat :: start using insecure frames, hide all secure ones
         useSecureFrames = false
-
-    elseif ( event == "PLAYER_REGEN_ENABLED" ) then
+    elseif event == "PLAYER_REGEN_ENABLED" then
         -- Out of combat :: start using secure frames, hide all insecure ones
         useSecureFrames = true
     end
@@ -185,7 +203,7 @@ local function handleStartEndCombat(event)
 
         To satisfy both of these conditions we swamp insecure and secure buttons upon enter/leave combat.
     ]]
-    if ( removeButtons ~= addButtons ) then
+    if removeButtons ~= addButtons then
         for i = 1, #removeButtons do
             removeButtons[i]:Hide()
             removeButtons[i]:SetParent(nil)
