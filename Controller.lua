@@ -28,31 +28,29 @@ end
 -- TRACK BUFFS
 ---------------------------------------------
 local function updateUnitBuffs(unit)
-    if isUnitAllowed(unit) then
-		-- Determine what mapped buffs are on the unit
-		local cache = {};
-		local buffMapping = C:GetBuffMapping();
-		for buffId = 1,BUFF_MAX_DISPLAY do
-			local name, icon, _, debuffType, _, _, _, _, _, spellId = UnitBuff(unit, buffId)
-			if spellId then
-				local buffIndex = buffMapping[spellId] or (name and buffMapping[name]);
-				if buffIndex then cache[buffIndex] = true; end
-			else
-				break;
-			end
+	-- Determine what mapped buffs are on the unit
+	local cache = {};
+	local buffMapping = C:GetBuffMapping();
+	for buffId = 1,BUFF_MAX_DISPLAY do
+		local name, icon, _, debuffType, _, _, _, _, _, spellId = UnitBuff(unit, buffId)
+		if spellId then
+			local buffIndex = buffMapping[spellId] or (name and buffMapping[name]);
+			if buffIndex then cache[buffIndex] = true; end
+		else
+			break;
 		end
-
-		-- Determine which of the required buffs were not cached on the unit
-		local missing = {}
-		local role = UnitGroupRolesAssigned(unit)
-		local className = select(2, UnitClass(unit))
-		for _,buffIndex in ipairs(C:GetEnabledBuffs()) do
-			if not cache[buffIndex] and C:BuffIsRequiredForClassRole(className, role, buffIndex) then
-				tinsert(missing, buffIndex)
-			end
-		end
-		MRB.Model:SetPlayerBuff(unit, missing)
 	end
+
+	-- Determine which of the required buffs were not cached on the unit
+	local missing = {}
+	local role = UnitGroupRolesAssigned(unit)
+	local className = select(2, UnitClass(unit))
+	for _,buffIndex in ipairs(C:GetEnabledBuffs()) do
+		if not cache[buffIndex] and C:BuffIsRequiredForClassRole(className, role, buffIndex) then
+			tinsert(missing, buffIndex)
+		end
+	end
+	MRB.Model:SetPlayerBuff(unit, missing)
 end
 
 local function refreshAllPartyRaidBuffs()
@@ -78,7 +76,9 @@ end
 MRB.RegisterCallback(MODULE_NAME, "initialize", function()
     -- Watch for buff applied/removed
     MRB.RegisterEvent(MODULE_NAME, "UNIT_AURA", function(event, unit)
-        updateUnitBuffs(unit)
+		if isUnitAllowed(unit) then
+			updateUnitBuffs(unit)
+		end
     end)
     -- Make sure to update unit status when flags updated
     MRB.RegisterEvent(MODULE_NAME, "UNIT_HEALTH", function(event, unit)
