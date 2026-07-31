@@ -83,6 +83,7 @@ MRB.RegisterCallback(MODULE_NAME, "initialize", function()
     -- Make sure to update unit status when flags updated
     MRB.RegisterEvent(MODULE_NAME, "UNIT_HEALTH", function(event, unit)
         if isUnitAllowed(unit) then
+			-- TODO: Determine if this is necessary, it's a VERY expensive event.
 			MRB.Model:UpdatePlayerStatus(unit)
 		end
     end)

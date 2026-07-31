@@ -79,10 +79,8 @@ local function showHideFrame()
     end
 
     if ( isEmpty or inCombat or not inParty ) then
-        MRB:debug(MODULE_NAME, "HIDE", "isEmpty", isEmpty, "inCombat", inCombat, "inParty", inParty)
         MissingRaidBuffsListView:Hide()
     else
-        MRB:debug(MODULE_NAME, "SHOW", "isEmpty", isEmpty, "inCombat", inCombat, "inParty", inParty)
         MissingRaidBuffsListView:Show()
     end
 end

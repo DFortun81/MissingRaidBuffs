@@ -71,8 +71,6 @@ end
 ---------------------------------------------
 local L_ADDON_NAME = L["Missing Raid Buffs"]
 local L_ADDON_DESCRIPTION = L["List missing raid buffs for party & raid members"]
-local L_DEBUG = L["Debug"]
-local L_DEBUG_DESCRIPTION = L["Enable debugging"]
 local L_GENERAL = GENERAL
 local L_BUFFS = L["Buffs"]
 local L_SHOW = SHOW
@@ -680,22 +678,6 @@ local MRBConfigTable = {
                     width = "full",
 					arg = "MaxRanksOnly"
 				},
-                debug = {
-                    order = 100,
-                    type = "toggle",
-                    name = L_DEBUG,
-                    desc = L_DEBUG_DESCRIPTION,
-                    set = function(info, value) MRB.isDebug = value end,
-                    get = function(info) return MRB.isDebug end,
-                    hidden = MRB.IS_RELEASE_VERSION,
-                    width = "normal",
-                },
-                debug_spacer = {
-                    order = 101,
-                    type = "description",
-                    name = "",
-                    width = "double"
-                },
                 groupAssignments = {
                     order = 200,
                     type = "group",

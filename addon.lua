@@ -26,26 +26,6 @@ MRB.IS_RELEASE_VERSION = MRB.VERSION:match("^%d+.%d+.%d+$") ~= nil
 
 
 ---------------------------------------------
--- VARIABLES
----------------------------------------------
-MRB.isDebug = false
-
-
----------------------------------------------
--- METHODS
----------------------------------------------
-function MRB:debug(...)
-    if ( MRB.isDebug ) then
-        print("[" .. MRB.ADDON_NAME .. "]", ...)
-    end
-end
-
-function MRB:trace(...)
-    -- do nothing
-end
-
-
----------------------------------------------
 -- EVENTS & CALLBACKS
 ---------------------------------------------
 MRB.callbacks = LibStub("CallbackHandler-1.0"):New(MRB)
