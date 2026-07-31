@@ -42,30 +42,10 @@ local openToCategory = Settings and Settings.OpenToCategory or InterfaceOptionsF
 -- LIST VIEW
 ---------------------------------------------
 local function showHideFrame()
-    if ( not C:is("Show") ) then
-        MissingRaidBuffsListView:Hide()
-        return
-    end
-
-    -- hide when noone needs a healthstone
-    local isEmpty = false -- treat isEmpty as false when HideWhenEmpty == false
-    if ( C:is("HideWhenEmpty") ) then
-        isEmpty = ( #orderedPlayersWithMissingBuffs == 0 )
-    end
-
-    -- hide when in combat
-    local inCombat = false -- treat inCombat as false when HideWhenInComat == false
-    if ( C:is("HideWhenInCombat") ) then
-        inCombat = UnitAffectingCombat("player")
-    end
-
-    -- hiding when not in group
-    local inParty = true -- treat inParty as true when HideNotInGroup == false
-    if ( C:is("HideWhenNotInGroup") ) then
-        inParty = UnitInParty("player")
-    end
-
-    if ( isEmpty or inCombat or not inParty ) then
+    if not C:is("Show")
+		or (C:is("HideWhenEmpty") and #orderedPlayersWithMissingBuffs == 0)
+		or (C:is("HideWhenInCombat") and UnitAffectingCombat("player"))
+		or (C:is("HideWhenNotInGroup") and not UnitInParty("player")) then
         MissingRaidBuffsListView:Hide()
     else
         MissingRaidBuffsListView:Show()
