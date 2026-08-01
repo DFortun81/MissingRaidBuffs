@@ -87,6 +87,9 @@ MRB.RegisterCallback(MODULE_NAME, "initialize", function()
 
     -- Reload all buffs when group updates
     MRB.RegisterEvent(MODULE_NAME, "GROUP_ROSTER_UPDATE", refreshAllPartyRaidBuffs)
+    -- Reload all buffs when group is joined or left
+    MRB.RegisterEvent(MODULE_NAME, "GROUP_JOINED", refreshAllPartyRaidBuffs)
+    MRB.RegisterEvent(MODULE_NAME, "GROUP_LEFT", refreshAllPartyRaidBuffs)
 
     -- Reload all buffs when configured buffs upates
     C.RegisterListener(MODULE_NAME, "updateBuffs", refreshAllPartyRaidBuffs)
