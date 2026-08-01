@@ -7,12 +7,6 @@ local ipairs, tinsert, BUFF_MAX_DISPLAY
 local UnitBuff, UnitInParty, UnitInRaid, GetNumGroupMembers, GetNumSubgroupMembers, UnitClass, UnitGroupRolesAssigned
 	= UnitBuff, UnitInParty, UnitInRaid, GetNumGroupMembers, GetNumSubgroupMembers, UnitClass, UnitGroupRolesAssigned;
 
----------------------------------------------
--- CONSTANTS
----------------------------------------------
-local PLAYER_NAME = UnitName("player")
-local COMBATLOG_OBJECT_AFFILIATION_RAID_OR_PARTY = bit.bor(COMBATLOG_OBJECT_AFFILIATION_RAID, COMBATLOG_OBJECT_AFFILIATION_PARTY, COMBATLOG_OBJECT_AFFILIATION_MINE)
-
 
 ---------------------------------------------
 -- UTILITIES
@@ -86,13 +80,23 @@ MRB.RegisterCallback(MODULE_NAME, "initialize", function()
 			MRB.Model:UpdatePlayerStatus(unit)
 		end
     end)
-
+	
     -- Reload all buffs when we first enter the world
     MRB.RegisterEvent(MODULE_NAME, "PLAYER_ENTERING_WORLD", refreshAllPartyRaidBuffs)
 
     -- Reload all buffs when group is joined or left
     MRB.RegisterEvent(MODULE_NAME, "GROUP_JOINED", refreshAllPartyRaidBuffs)
     MRB.RegisterEvent(MODULE_NAME, "GROUP_LEFT", refreshAllPartyRaidBuffs)
+	
+	-- Reload all buffs when the group size changes
+	local lastNumRaidMembers = 0;
+	MRB.RegisterEvent(MODULE_NAME, "GROUP_ROSTER_UPDATE", function()
+		local numRaidMembers = GetNumGroupMembers()
+		if numRaidMembers ~= lastNumRaidMembers then
+			lastNumRaidMembers = numRaidMembers
+			refreshAllPartyRaidBuffs()
+		end
+	end)
 
     -- Reload all buffs when configured buffs upates
     C.RegisterListener(MODULE_NAME, "updateBuffs", refreshAllPartyRaidBuffs)
