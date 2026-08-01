@@ -81,6 +81,11 @@ MRB.RegisterCallback(MODULE_NAME, "initialize", function()
 			updateUnitBuffs(unit)
 		end
     end)
+    MRB.RegisterEvent(MODULE_NAME, "UNIT_FLAGS", function(event, unit, ...)
+		if isUnitAllowed(unit) then
+			MRB.Model:UpdatePlayerStatus(unit)
+		end
+    end)
 
     -- Reload all buffs when we first enter the world
     MRB.RegisterEvent(MODULE_NAME, "PLAYER_ENTERING_WORLD", refreshAllPartyRaidBuffs)
