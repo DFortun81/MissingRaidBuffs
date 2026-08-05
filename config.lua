@@ -14,6 +14,7 @@ local IS_PRIEST = PLAYER_CLASS == "PRIEST"
 local IS_MAGE = PLAYER_CLASS == "MAGE"
 local IS_DRUID = PLAYER_CLASS == "DRUID"
 local IS_PALADIN = PLAYER_CLASS == "PALADIN"
+local IS_SHAMAN = PLAYER_CLASS == "SHAMAN"
 local PLAYER_LEVEL = UnitLevel("player");
 local MAX_LEVEL = 60
 
@@ -41,6 +42,19 @@ local GREATER_BLESSING_OF_SALVATION_SPELLID = 25895	-- Greater Blessing of Salva
 local BLESSING_OF_SANCTUARY_SPELLID = 20914	-- Blessing of Sanctuary (Rank 4)
 local GREATER_BLESSING_OF_SANCTUARY_SPELLID = 25899	-- Greater Blessing of Sanctuary (Rank 1)
 
+-- Totems
+--[[
+Windfury Totem? - This is a weapon enhancement, not sure if I can track this
+Grace of Air Totem
+Strength of Earth Totem
+Mana Spring Totem
+Healing Stream Totem
+]]--
+local GRACE_OF_AIR_SPELLID = 25360	-- Grace of Air (Rank 3)
+local STRENGTH_OF_EARTH_SPELLID = 25362	-- Strength of Earth (Rank 5)
+local MANA_SPRING_SPELLID = 10494	-- Mana Spring (Rank 4)
+local HEALING_STREAM_TOTEM = 10461	-- Healing Stream (Rank 5)
+
 -- Switch the desired spellIDs based on the game flavor
 local version = select(7, GetBuildInfo());
 if version >= 20000 then
@@ -64,6 +78,9 @@ if version >= 20000 then
 	GREATER_BLESSING_OF_WISDOM_SPELLID = 27143	-- Greater Blessing of Wisdom (Rank 3)
 	BLESSING_OF_SANCTUARY_SPELLID = 27168	-- Blessing of Sanctuary (Rank 5)
 	GREATER_BLESSING_OF_SANCTUARY_SPELLID = 27169	-- Greater Blessing of Sanctuary (Rank 2)
+	STRENGTH_OF_EARTH_SPELLID = 25527	-- Strength of Earth (Rank 6)
+	MANA_SPRING_SPELLID = 25569	-- Mana Spring (Rank 5)
+	HEALING_STREAM_TOTEM = 25566	-- Healing Stream (Rank 6)
 end
 
 
@@ -489,7 +506,103 @@ C.DEFAULT_DB = {
 					["NONE"] = true,
 				},
             },
-        },
+			{ -- "Mana Spring"
+                Enabled = IS_SHAMAN,
+				Visible = version >= 20000 or not IS_ALLIANCE,
+                Spells = {
+                    MANA_SPRING_SPELLID,
+                },
+                Filters = {
+                    ["DRUID"] = true,
+                    ["HUNTER"] = true,
+                    ["MAGE"] = true,
+                    ["PALADIN"] = true,
+                    ["PRIEST"] = true,
+                    ["ROGUE"] = false,
+                    ["SHAMAN"] = true,
+                    ["WARLOCK"] = true,
+                    ["WARRIOR"] = false,
+                },
+				Roles = {
+					["TANK"] = true,
+					["HEALER"] = true,
+					["DAMAGER"] = true,
+					["NONE"] = true,
+				},
+            },
+			{ -- "Healing Stream"
+                Enabled = IS_SHAMAN,
+				Visible = version >= 20000 or not IS_ALLIANCE,
+                Spells = {
+                    HEALING_STREAM_TOTEM,
+                },
+                Filters = {
+                    ["DRUID"] = true,
+                    ["HUNTER"] = true,
+                    ["MAGE"] = true,
+                    ["PALADIN"] = true,
+                    ["PRIEST"] = true,
+                    ["ROGUE"] = true,
+                    ["SHAMAN"] = true,
+                    ["WARLOCK"] = true,
+                    ["WARRIOR"] = true,
+                },
+				Roles = {
+					["TANK"] = true,
+					["HEALER"] = true,
+					["DAMAGER"] = true,
+					["NONE"] = true,
+				},
+            },
+			{ -- "Strength of Earth"
+                Enabled = IS_SHAMAN,
+				Visible = version >= 20000 or not IS_ALLIANCE,
+                Spells = {
+                    STRENGTH_OF_EARTH_SPELLID,
+                },
+                Filters = {
+                    ["DRUID"] = true,
+                    ["HUNTER"] = true,
+                    ["MAGE"] = false,
+                    ["PALADIN"] = true,
+                    ["PRIEST"] = false,
+                    ["ROGUE"] = true,
+                    ["SHAMAN"] = true,
+                    ["WARLOCK"] = false,
+                    ["WARRIOR"] = true,
+                },
+				Roles = {
+					["TANK"] = true,
+					["HEALER"] = false,
+					["DAMAGER"] = true,
+					["NONE"] = true,
+				},
+            },
+			{ -- "Grace of Air"
+                Enabled = IS_SHAMAN,
+				Visible = version >= 20000 or not IS_ALLIANCE,
+                Spells = {
+                    GRACE_OF_AIR_SPELLID,
+                },
+                Filters = {
+                    ["DRUID"] = true,
+                    ["HUNTER"] = true,
+                    ["MAGE"] = false,
+                    ["PALADIN"] = true,
+                    ["PRIEST"] = false,
+                    ["ROGUE"] = true,
+                    ["SHAMAN"] = true,
+                    ["WARLOCK"] = false,
+                    ["WARRIOR"] = true,
+                },
+				Roles = {
+					["TANK"] = true,
+					["HEALER"] = false,
+					["DAMAGER"] = true,
+					["NONE"] = true,
+				},
+            },
+		},
     }
 }
 function C:upgradeDB()
