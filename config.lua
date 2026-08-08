@@ -390,7 +390,7 @@ C.DEFAULT_DB = {
                 },
                 Filters = {
                     ["DRUID"] = true,
-                    ["HUNTER"] = true,
+                    ["HUNTER"] = version >= 20000,
                     ["MAGE"] = false,
                     ["PALADIN"] = true,
                     ["PRIEST"] = false,
